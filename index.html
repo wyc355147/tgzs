@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="description" content="铜鼓之声 - 用文字记录成长，用思想照亮青春">
+<title>铜鼓之声</title>
+
+
+<!-- 资源预加载 -->
+<link rel="preconnect" href="https://s41.ax1x.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="dns-prefetch" href="https://s41.ax1x.com">
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+<!-- 样式链接 (按依赖顺序加载) -->
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/loading.css">
+<link rel="stylesheet" href="styles/layout.css">
+<link rel="stylesheet" href="styles/components.css">
+<link rel="stylesheet" href="styles/reading.css">
+<link rel="stylesheet" href="styles/bookshelf.css">
+<link rel="stylesheet" href="styles/onboarding.css">
+<!-- 投稿系统样式 -->
+<link rel="stylesheet" href="styles/submission.css">
+
+
+<!-- 网页图标 -->
+<link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+    
+    
+<!-- 关键 CSS 内联 (仅保留防闪烁最小样式) -->
+<style>
+:root { --bg-primary: #ffffff; --text-primary: #1a1a1a; }
+[data-theme="dark"] { --bg-primary: #09090b; --text-primary: #f4f4f5; }
+body { margin: 0; background: var(--bg-primary); }
+.loading-overlay { position: fixed; inset: 0; background: var(--bg-primary); z-index: 99999; display: flex; align-items: center; justify-content: center; transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.loading-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+</style>
+
+<!-- 加载遮罩层 (HTML 预置 - 成功案例标准版) -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="book-loader">
+    <div class="book-spine"></div>
+    <div class="book-page static-left"></div>
+    <div class="book-page static-right"></div>
+    <div class="book-page active"></div>
+    <div class="book-page active"></div>
+    <div class="book-page active"></div>
+    <div class="book-page active"></div>
+  </div>
+  <!-- 调试模式指示器 -->
+  <div class="loading-debug-indicator" id="loadingDebugIndicator" style="display:none">
+    <span>调试模式</span>
+    <button id="loadingDebugStop">停止</button>
+  </div>
+</div>
+
+<!-- 导航栏 -->
+<nav class="navbar glass" id="navbar">
+
+
+<!-- 修改后代码 -->
+<a href="https://tgzs.rth1.xyz" class="logo" target="_self" rel="noopener noreferrer" title="返回铜鼓之声官网">
+<img src="https://s41.ax1x.com/2026/01/01/pZU9qte.png" alt="铜鼓之声" style="max-height:40px;display:block;" loading="eager">
+</a>
+<ul class="nav-links" id="navLinks">
+<li><a href="#" class="active">首页</a></li>
+<li><a href="#articles">文章</a></li>
+<li><a href="#about">关于</a></li>
+<!-- 修改后：直接跳转到 GitHub Releases 最新版 -->
+<li>
+  <a href="https://wyc355147.github.io/tgzs-app-About/" 
+     target="_blank" 
+     rel="noopener noreferrer"
+     title="下载铜鼓之声 APP 最新版本">
+    APP
+  </a>
+</li>
+</ul>
+<div class="nav-actions">
+<button class="btn-icon" id="bookshelfToggle" aria-label="书架" title="我的书架">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+</svg>
+</button>
+<button class="btn-icon" id="searchToggle" aria-label="搜索" title="搜索">
+<svg class="icon-search" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+</svg>
+</button>
+<button class="btn-icon" id="themeToggle" aria-label="切换主题" title="深色模式">
+<svg class="icon-sun sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+</svg>
+<svg class="icon-moon moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+</svg>
+</button>
+
+
+<!-- 修改后：添加 data-action 属性，由 submission.js 自动绑定 -->
+<button class="btn-primary" data-action="open-submission">
+    <svg class="icon-upload" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+    </svg>
+    投稿
+</button>
+
+<div class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="菜单">
+<span></span><span></span><span></span>
+</div>
+</div>
+</nav>
+
+<!--  主容器 -->
+<main class="container">
+<!--  英雄区域：封面轮播 -->
+<section class="hero">
+<div class="carousel glass">
+<div class="carousel-track" id="carouselTrack"></div>
+<button class="carousel-nav carousel-prev" id="carouselPrev" aria-label="上一张">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M15 18l-6-6 6-6"/>
+</svg>
+</button>
+<button class="carousel-nav carousel-next" id="carouselNext" aria-label="下一张">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M9 18l6-6-6-6"/>
+</svg>
+</button>
+<div class="carousel-dots"></div>
+</div>
+</section>
+
+<!--  主内容区：文章列表 -->
+<section id="articles">
+<div class="section-header">
+<h2 class="section-title">文章推荐</h2>
+<a href="#" class="section-link" id="refreshRecommendations">换一批
+<svg class="icon-chevron-right" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M9 18l6-6-6-6"/>
+</svg>
+</a>
+</div>
+<div class="article-grid"></div>
+</section>
+
+<!--  侧边栏 -->
+<aside class="sidebar">
+<div class="sidebar-card glass">
+<div class="search-box">
+<svg class="icon-search" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+</svg>
+<input type="search" placeholder="搜索文章、作者、标签、id..." aria-label="搜索">
+</div>
+</div>
+<div class="sidebar-card glass">
+<div class="section-header" style="margin:-6px -6px 14px;padding:0 6px 14px;border:none">
+<h3 class="section-title" style="font-size:1.05rem">标签</h3>
+</div>
+<div class="tags-scroll no-scrollbar"></div>
+</div>
+
+<!-- 修改后：改为 <a> 标签，添加正确链接和安全属性 -->
+<div class="sidebar-card glass subscribe-card">
+  <h4>📬 下载「铜鼓之声」APP</h4>
+  <p>获取最新推送，不错过任何精彩</p>
+  <a href="https://github.com/wyc355147/tongguzhisheng/releases/latest" 
+     target="_blank" 
+     rel="noopener noreferrer"
+     class="btn-primary" 
+     style="width:100%;justify-content:center;display:inline-flex;align-items:center">
+    立即下载
+  </a>
+</div>
+</aside>
+
+<!--  页脚 -->
+<footer class="footer" style="grid-column:1/-1;padding:48px 24px 72px;text-align:center;color:var(--text-tertiary);font-size:0.9rem;border-top:1px solid var(--border-color);margin-top:32px">
+<div style="display:flex;justify-content:center;gap:28px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="https://wyc355147.github.io/tgzs-Submission-guidelines/" target="_blank" rel="noopener noreferrer" style="font-weight:500; cursor: pointer;">投稿指南</a>
+    <a href="https://wyc355147.github.io/tgzs-Use-declaration/" target="_blank" rel="noopener noreferrer" style="font-weight:500; cursor: pointer;">使用声明</a>
+</div>
+<p style="opacity:0.8">© 2026 铜鼓之声 · 白云工作室 BaiyunStudio · 天柱县第五中学</p>
+</footer>
+</main>
+
+<!--  全屏阅读界面 -->
+<div class="reading-view" id="readingView" role="dialog" aria-modal="true" aria-label="文章阅读">
+<div class="reading-progress">
+<div class="reading-progress-bar" id="progressBar"></div>
+</div>
+<header class="reading-header" id="readingHeader">
+<button class="reading-back" id="readingBack" aria-label="返回">
+<svg class="icon-chevron-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M19 12H5M12 19l-7-7 7-7"/>
+</svg>
+<span class="reading-title-preview" id="readingTitlePreview">文章标题</span>
+</button>
+<div class="reading-header-actions">
+<button class="btn-icon" id="readingShare" aria-label="分享" title="分享">
+<svg class="icon-share" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+<path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/>
+</svg>
+</button>
+<button class="btn-icon" id="readingBookmark" aria-label="收藏" title="收藏">
+<svg class="icon-bookmark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+</svg>
+</button>
+<div class="reading-menu-container" style="position: relative;">
+<button class="btn-icon" id="readingMore" aria-label="更多" title="更多选项">
+<svg class="icon-more" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+</svg>
+</button>
+<div class="reading-menu-dropdown" id="readingMenuDropdown">
+<div class="menu-item" id="menuCopyLink">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+复制链接
+</div>
+<div class="menu-item" id="menuCopyID">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+<line x1="9" y1="9" x2="15" y2="15"></line>
+<line x1="15" y1="9" x2="9" y2="15"></line>
+</svg>
+复制文章 ID
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class="reading-scroll" id="readingScroll">
+<article class="reading-article">
+<div class="reading-hero-image">
+<img id="readingHeroImage" src="" alt="文章封面" loading="eager">
+</div>
+<h1 class="reading-title" id="readingTitle"></h1>
+<p class="reading-subtitle" id="readingSubtitle"></p>
+<div class="reading-meta">
+<div class="reading-author">
+<span class="avatar" id="readingAuthorAvatar">A</span>
+<div class="reading-author-info">
+<div class="name" id="readingAuthorName"></div>
+<div class="role" id="readingAuthorRole"></div>
+</div>
+</div>
+</div>
+<div class="reading-content" id="readingContent"></div>
+<section class="reading-related">
+<h3 style="font-size:1.2rem;font-weight:600;margin-bottom:16px">你可能也喜欢</h3>
+<div class="related-grid" id="relatedGrid"></div>
+</section>
+</article>
+</div>
+<div class="reading-float-panel">
+<button class="float-btn" id="floatTop" aria-label="返回顶部" title="返回顶部">
+<svg class="icon-arrow-up" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M12 19V5M5 12l7-7 7 7"/>
+</svg>
+</button>
+</div>
+</div>
+
+<!-- 第三方库 -->
+<script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+
+
+<!-- 期刊元数据文件 (方案一：数据拆分架构) -->
+<script src="journals/meta/issue-2023-01.js"></script>
+<script src="journals/meta/issue-2024-02.js"></script>
+<script src="journals/meta/issue-2024-03.js"></script>
+<script src="journals/meta/issue-2025-04.js"></script>
+<script src="journals/meta/issue-2025-05.js"></script>
+<script src="journals/meta/issue-2025-06.js"></script>
+<script src="journals/meta/issue-2025-07.js"></script>
+
+<!-- 数据收集脚本 (适配元数据架构) -->
+<script>
+// 初始化全局元数据收集池
+window.allJournalMetaIssues = window.allJournalMetaIssues || [];
+
+// 收集所有已加载的单期元数据
+if (window.journalIssueMeta) {
+    const exists = window.allJournalMetaIssues.some(issue =>
+        issue.metadata && issue.metadata.issueNumber === window.journalIssueMeta.metadata.issueNumber
+    );
+    if (!exists) {
+        window.allJournalMetaIssues.push(window.journalIssueMeta);
+        console.log('元数据已注册至 allJournalMetaIssues 池，当前期数：', window.journalIssueMeta.metadata?.issueNumber);
+    }
+}
+
+// 兼容旧代码：同时保留 allJournalIssues 引用（降级）
+window.allJournalIssues = window.allJournalMetaIssues;
+
+console.log('已收集元数据期刊数量:', window.allJournalMetaIssues.length);
+</script>
+
+<!--  加载系统 (必须第一个加载) -->
+<script src="scripts/loading.js"></script>
+
+<!-- JavaScript 引入（按依赖顺序） -->
+<script src="scripts/main.js"></script>
+<script src="scripts/carousel.js"></script>
+<script src="scripts/about.js"></script>
+<script src="scripts/search.js"></script>
+<script src="scripts/tags.js"></script>
+<script src="scripts/bookshelf.js"></script>
+<script src="scripts/onboarding.js"></script>
+<!-- 投稿系统 (必须在 main.js 之后加载) -->
+<script src="scripts/submission.js"></script>
+
+
+
+<!-- Eruda 控制台 (生产环境可移除) -->
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script src="https://cdn.jsdelivr.net/npm/eruda-monitor"></script>
+<script>
+setTimeout(() => {
+        eruda.init();
+        eruda.add(erudaMonitor);
+    }, 2000);
+</script>
+</body>
+</html>
