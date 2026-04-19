@@ -1,0 +1,429 @@
+/**
+* 文件名：submission.css
+* 作用：铜鼓之声投稿引导系统样式（响应式布局版）
+* 版本：1.1.0
+* 特点：移除放大动画、移动端竖向底部卡片、桌面端横向居中卡片、深色模式适配
+*/
+
+/* ===============================
+投稿模态框基础样式
+=============================== */
+.submission-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+  pointer-events: none;
+}
+
+.submission-modal.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.submission-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: opacity var(--transition-normal);
+}
+
+/* ===============================
+模态框内容卡片 - 桌面端默认样式（横向居中）
+=============================== */
+.submission-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+  /* 核心修复：移除放大动画，使用淡入 + 轻微上移 */
+  transform: translateY(12px);
+  transition: transform var(--transition-normal);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.submission-modal.active.ready .submission-modal-content {
+  transform: translateY(0);
+}
+
+/* 关闭按钮 */
+.submission-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.submission-modal-close:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  transform: scale(1.05);
+}
+
+/* ===============================
+头部区域
+=============================== */
+.submission-modal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.submission-modal-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bg-primary);
+  box-shadow: 0 8px 24px var(--accent-glow);
+}
+
+.submission-modal-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* ===============================
+主体内容区域 - 桌面端横向布局
+=============================== */
+.submission-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 重要提示卡片 */
+.submission-notice {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  align-items: flex-start;
+}
+
+.submission-notice svg {
+  flex-shrink: 0;
+  color: var(--accent-primary);
+  margin-top: 2px;
+}
+
+.submission-notice-text {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.submission-notice-text strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* 操作按钮 */
+.submission-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.submission-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  border: none;
+  white-space: nowrap;
+}
+
+.submission-btn-primary {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
+.submission-btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px var(--accent-glow);
+}
+
+.submission-btn-primary:active {
+  transform: translateY(0);
+}
+
+.submission-btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.submission-btn-secondary:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* 分割线 */
+.submission-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--text-tertiary);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.submission-divider::before,
+.submission-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-light);
+}
+
+/* 邮箱区域 */
+.submission-email-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.submission-email-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.submission-email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  width: 100%;
+  max-width: 360px;
+  justify-content: center;
+}
+
+.submission-email-link:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.submission-email-address {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.submission-email-hint {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
+/* 底部区域 */
+.submission-modal-footer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: center;
+}
+
+/* ===============================
+深色模式适配
+=============================== */
+[data-theme="dark"] .submission-modal-content {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .submission-modal-icon {
+  box-shadow: 0 8px 24px rgba(244, 244, 245, 0.15);
+}
+
+/* ===============================
+移动端适配 - 竖向底部卡片样式
+=============================== */
+@media (max-width: 768px) {
+  .submission-modal {
+    padding: 16px;
+    align-items: flex-end; /* 核心：底部对齐 */
+  }
+  
+  .submission-modal-content {
+    max-width: 100%;
+    /* 核心：底部圆角 + 顶部直角，形成卡片感 */
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 32px;
+    /* 核心：初始位置在屏幕外底部 */
+    transform: translateY(100%);
+    /* 核心：移除 scale 动画，仅使用垂直位移 */
+    transition: transform var(--transition-normal);
+    max-height: 85vh;
+  }
+  
+  .submission-modal.active.ready .submission-modal-content {
+    /* 核心：仅垂直上移至原位 */
+    transform: translateY(0);
+  }
+  
+  /* 头部居中 */
+  .submission-modal-header {
+    padding-bottom: 16px;
+  }
+  
+  .submission-modal-title {
+    font-size: 1.2rem;
+  }
+  
+  /* 内容区域适配 */
+  .submission-notice {
+    padding: 14px;
+    gap: 10px;
+  }
+  
+  .submission-notice-text {
+    font-size: 0.88rem;
+  }
+  
+  .submission-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .submission-email-link {
+    padding: 12px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .submission-email-address {
+    font-size: 0.85rem;
+  }
+  
+  /* 分割线优化 */
+  .submission-divider {
+    gap: 12px;
+    font-size: 0.8rem;
+  }
+  
+  /* 底部按钮组 */
+  .submission-modal-footer {
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+}
+
+/* ===============================
+小屏手机深度适配
+=============================== */
+@media (max-width: 480px) {
+  .submission-modal {
+    padding: 12px;
+  }
+  
+  .submission-modal-content {
+    border-radius: 16px 16px 0 0;
+    padding: 20px 16px 28px;
+  }
+  
+  .submission-modal-title {
+    font-size: 1.1rem;
+  }
+  
+  .submission-modal-icon {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .submission-notice {
+    padding: 12px;
+  }
+  
+  .submission-notice-text {
+    font-size: 0.85rem;
+  }
+  
+  .submission-btn {
+    padding: 9px 18px;
+    font-size: 0.88rem;
+  }
+  
+  .submission-email-link {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+  }
+}
+
+/* ===============================
+无障碍支持
+=============================== */
+.submission-modal-content:focus {
+  outline: none;
+}
+
+.submission-modal [role="dialog"]:focus {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .submission-modal,
+  .submission-modal-content,
+  .submission-btn,
+  .submission-email-link {
+    transition: none !important;
+    transform: none !important;
+  }
+}

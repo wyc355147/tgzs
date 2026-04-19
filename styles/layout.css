@@ -1,0 +1,1051 @@
+/* ===============================
+ 导航栏 - 固定顶部 + 智能毛玻璃
+=============================== */
+.navbar {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+height: 72px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 28px;
+z-index: 1000;
+transition: all var(--transition-normal);
+}
+.navbar.scrolled {
+height: 64px;
+background: var(--bg-overlay);
+border-bottom: 1px solid var(--border-light);
+box-shadow: var(--shadow-sm);
+}
+.logo {
+font-size: 1.375rem;
+font-weight: 700;
+letter-spacing: -0.03em;
+display: flex;
+align-items: center;
+gap: 10px;
+color: var(--text-primary);
+}
+.logo img {
+height: auto;
+max-height: 40px;
+width: auto;
+object-fit: contain;
+}
+.logo-icon {
+width: 32px;
+height: 32px;
+background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
+border-radius: 8px;
+display: flex;
+align-items: center;
+justify-content: center;
+color: var(--bg-primary);
+font-weight: 800;
+font-size: 0.9rem;
+box-shadow: 0 4px 12px var(--accent-glow);
+}
+.nav-links {
+display: flex;  align-items: center;
+gap: 28px;
+list-style: none;
+}
+.nav-links a {
+font-size: 0.95rem;
+font-weight: 500;
+color: var(--text-secondary);
+position: relative;
+padding: 10px 0;
+transition: color var(--transition-fast);
+}
+.nav-links a:hover,
+.nav-links a.active {
+color: var(--text-primary);
+}
+.nav-links a.active::after {
+content: '';
+position: absolute;
+bottom: 0;
+left: 50%;
+transform: translateX(-50%);
+width: 20px;
+height: 2px;
+background: var(--accent-primary);
+border-radius: 2px;
+transition: width var(--transition-fast);
+}
+.nav-links a:hover::after {
+width: 28px;
+}
+.nav-actions {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.btn-icon {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+background: var(--bg-secondary);  border: 1px solid var(--border-color);
+cursor: pointer;
+transition: all var(--transition-fast);
+color: var(--text-secondary);
+position: relative;
+overflow: hidden;
+}
+.btn-icon::after {
+content: '';
+position: absolute;
+inset: 0;
+background: var(--accent-glow);
+opacity: 0;
+transition: opacity var(--transition-fast);
+border-radius: 50%;
+}
+.btn-icon:hover {
+background: var(--bg-tertiary);
+color: var(--text-primary);
+transform: translateY(-2px);
+box-shadow: var(--shadow-sm);
+}
+.btn-icon:hover::after {
+opacity: 1;
+}
+.btn-icon:active {
+transform: translateY(0);
+}
+.btn-primary {
+padding: 10px 24px;
+background: var(--accent-primary);
+color: var(--bg-primary);
+border: none;
+border-radius: 24px;
+font-size: 0.9rem;
+font-weight: 600;
+cursor: pointer;
+transition: all var(--transition-fast);
+display: flex;
+align-items: center;
+gap: 6px;
+box-shadow: 0 4px 14px var(--accent-glow);
+}
+.btn-primary:hover {  background: var(--accent-hover);
+transform: translateY(-2px);
+box-shadow: 0 6px 20px var(--accent-glow);
+}
+.btn-primary:active {
+transform: translateY(0);
+}
+/* 汉堡菜单 - 动画优化 */
+.mobile-menu-toggle {
+display: none;
+flex-direction: column;
+gap: 5px;
+cursor: pointer;
+padding: 8px;
+border-radius: 8px;
+transition: background var(--transition-fast);
+}
+.mobile-menu-toggle:hover {
+background: var(--bg-secondary);
+}
+.mobile-menu-toggle span {
+width: 22px;
+height: 2px;
+background: var(--text-primary);
+border-radius: 2px;
+transition: all var(--transition-normal);
+}
+.mobile-menu-toggle.active span:nth-child(1) {
+transform: rotate(45deg) translate(5px, 5px);
+}
+.mobile-menu-toggle.active span:nth-child(2) {
+opacity: 0;
+}
+.mobile-menu-toggle.active span:nth-child(3) {
+transform: rotate(-45deg) translate(5px, -5px);
+}
+/* ===============================
+ 主容器 - 响应式智能网格
+=============================== */
+.container {
+max-width: var(--container-max);
+margin: 0 auto;
+padding: 96px 28px 56px;
+display: grid;  grid-template-columns: 1fr var(--sidebar-width);
+gap: 36px;
+align-items: start;
+}
+/* ===============================
+ 英雄区域 - 全屏轮播升级
+=============================== */
+.hero {
+grid-column: 1 / -1;
+margin-bottom: 32px;
+}
+.carousel {
+position: relative;
+border-radius: var(--radius-xl);
+overflow: hidden;
+aspect-ratio: 21/9;
+background: var(--bg-secondary);
+box-shadow: var(--shadow-lg);
+cursor: grab;
+}
+.carousel:active {
+cursor: grabbing;
+}
+.carousel-track {
+display: flex;
+transition: transform var(--transition-slow);
+height: 100%;
+}
+.carousel-slide {
+min-width: 100%;
+position: relative;
+display: flex;
+align-items: flex-end;
+padding: 40px;
+background: linear-gradient(to top, rgba(0,0,0,0.65), rgba(0,0,0,0.25), transparent 60%);
+color: white;
+}
+.carousel-slide img {
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+z-index: -1;  transition: transform 8s ease;
+}
+.carousel-slide.active img {
+transform: scale(1.08);
+}
+.carousel-content {
+position: relative;
+z-index: 2;
+max-width: 680px;
+animation: slideUp 0.6s var(--ease-bounce) forwards;
+opacity: 0;
+transform: translateY(20px);
+}
+.carousel-slide.active .carousel-content {
+opacity: 1;
+transform: translateY(0);
+}
+@keyframes slideUp {
+to { opacity: 1; transform: translateY(0); }
+}
+.carousel-tag {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+padding: 6px 14px;
+background: rgba(255,255,255,0.18);
+border: 1px solid rgba(255,255,255,0.3);
+border-radius: 24px;
+font-size: 0.8rem;
+font-weight: 500;
+margin-bottom: 14px;
+backdrop-filter: blur(10px);
+transition: background var(--transition-fast);
+}
+.carousel-tag:hover {
+background: rgba(255,255,255,0.28);
+}
+.carousel-title {
+font-size: 2rem;
+font-weight: 700;
+margin-bottom: 12px;
+line-height: 1.25;
+text-shadow: 0 2px 8px rgba(0,0,0,0.2);}
+.carousel-desc {
+font-size: 1.05rem;
+opacity: 0.95;
+margin-bottom: 20px;
+max-width: 520px;
+line-height: 1.5;
+}
+.carousel-cta {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+padding: 12px 28px;
+background: white;
+color: var(--accent-primary);
+border-radius: 26px;
+font-weight: 600;
+font-size: 0.95rem;
+transition: all var(--transition-fast);
+box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.carousel-cta:hover {
+transform: translateY(-2px);
+box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+.carousel-cta:active {
+transform: translateY(0);
+}
+.carousel-dots {
+position: absolute;
+bottom: 24px;
+right: 32px;
+display: flex;
+gap: 10px;
+z-index: 3;
+}
+.carousel-dot {
+width: 10px;
+height: 10px;
+border-radius: 50%;
+background: rgba(255,255,255,0.5);
+border: 2px solid transparent;
+cursor: pointer;
+transition: all var(--transition-fast);  padding: 3px;
+}
+.carousel-dot:hover {
+background: rgba(255,255,255,0.75);
+transform: scale(1.1);
+}
+.carousel-dot.active {
+background: white;
+border-color: rgba(0,0,0,0.2);
+transform: scale(1.15);
+box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+/* 轮播控制按钮 */
+.carousel-nav {
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+width: 48px;
+height: 48px;
+border-radius: 50%;
+background: rgba(255,255,255,0.92);
+border: 1px solid var(--border-light);
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all var(--transition-fast);
+z-index: 3;
+color: var(--text-primary);
+box-shadow: var(--shadow-md);
+}
+.carousel-nav:hover {
+background: white;
+transform: translateY(-50%) scale(1.08);
+box-shadow: var(--shadow-lg);
+}
+.carousel-nav:active {
+transform: translateY(-50%) scale(0.98);
+}
+.carousel-prev { left: 24px; }
+.carousel-next { right: 24px; }
+/* ===============================
+ 文章卡片系统 - 交互升级   =============================== */
+.section-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 24px;
+padding-bottom: 14px;
+border-bottom: 1px solid var(--border-color);
+}
+.section-title {
+font-size: 1.35rem;
+font-weight: 650;
+letter-spacing: -0.01em;
+}
+.section-link {
+font-size: 0.9rem;
+color: var(--text-secondary);
+display: flex;
+align-items: center;
+gap: 5px;
+font-weight: 500;
+transition: gap var(--transition-fast);
+}
+.section-link:hover {
+color: var(--accent-primary);
+gap: 8px;
+}
+.article-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+gap: 24px;
+}
+/* ===============================
+ 侧边栏组件 - 功能增强
+=============================== */
+.sidebar {
+position: sticky;
+top: 96px;
+display: flex;
+flex-direction: column;
+gap: 24px;
+height: fit-content;
+align-self: start;
+}
+.sidebar-card {
+border-radius: var(--radius-lg);
+padding: 22px;
+background: var(--bg-secondary);
+border: 1px solid var(--border-color);
+transition: box-shadow var(--transition-fast);
+}
+.sidebar-card:hover {
+box-shadow: var(--shadow-md);
+}
+.search-box {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 12px 18px;
+background: var(--bg-primary);
+border: 1px solid var(--border-color);
+border-radius: 26px;
+transition: all var(--transition-fast);
+}
+.search-box:focus-within {
+border-color: var(--accent-primary);
+box-shadow: 0 0 0 4px var(--accent-glow);
+}
+.search-box input {
+flex: 1;
+border: none;
+background: transparent;
+font-size: 0.9rem;
+color: var(--text-primary);
+outline: none;
+font-family: inherit;
+}
+.search-box input::placeholder {
+color: var(--text-tertiary);
+}
+.search-box svg {
+color: var(--text-tertiary);
+flex-shrink: 0;
+}
+.tags-scroll {
+display: flex;
+gap: 10px;  overflow-x: auto;
+padding: 4px 2px 8px;
+margin: 0 -4px;
+}
+.tag-pill {
+padding: 7px 16px;
+background: var(--bg-tertiary);
+border-radius: 22px;
+font-size: 0.85rem;
+white-space: nowrap;
+cursor: pointer;
+transition: all var(--transition-fast);
+border: 1px solid transparent;
+font-weight: 500;
+color: var(--text-secondary);
+}
+.tag-pill:hover {
+background: var(--bg-primary);
+border-color: var(--border-color);
+transform: translateY(-1px);
+}
+.tag-pill.active {
+background: var(--accent-primary);
+color: var(--bg-primary);
+border-color: var(--accent-primary);
+box-shadow: 0 4px 12px var(--accent-glow);
+}
+.trending-list {
+display: flex;
+flex-direction: column;
+gap: 16px;
+}
+.trending-item {
+display: flex;
+gap: 14px;
+padding-bottom: 16px;
+border-bottom: 1px solid var(--border-light);
+cursor: pointer;
+transition: transform var(--transition-fast);
+}
+.trending-item:last-child {
+padding-bottom: 0;
+border-bottom: none;
+}
+.trending-item:hover {
+transform: translateX(4px);
+}
+.trending-rank {
+width: 28px;
+height: 28px;
+border-radius: 8px;
+background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
+color: var(--bg-primary);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 0.8rem;
+font-weight: 700;
+flex-shrink: 0;
+box-shadow: 0 3px 10px var(--accent-glow);
+}
+.trending-rank.top-3 {
+background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+.trending-info .trending-title {
+font-size: 0.95rem;
+font-weight: 550;
+margin-bottom: 5px;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+overflow: hidden;
+line-height: 1.4;
+transition: color var(--transition-fast);
+}
+.trending-item:hover .trending-title {
+color: var(--accent-primary);
+}
+.trending-info .trending-meta {
+font-size: 0.78rem;
+color: var(--text-tertiary);
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.subscribe-card {
+text-align: center;  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+}
+.subscribe-card h4 {
+font-size: 1.1rem;
+margin-bottom: 8px;
+}
+.subscribe-card p {
+font-size: 0.88rem;
+color: var(--text-secondary);
+margin-bottom: 18px;
+line-height: 1.5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===============================
+ 移动端适配重构 (max-width: 992px)
+适配策略：内容优先、布局重构、触控友好
+=============================== */
+@media (max-width: 992px) {
+  
+  /* ========== 1. 主容器布局重构 ========== */
+  .container {
+    display: flex;              
+    flex-direction: column;     
+    /*  修复：大幅增加顶部内边距，确保内容不被固定定位的导航栏遮挡，间距设为80px */
+    padding: 108px 20px 24px; /* 原 100px + 8px = 108px */
+    gap: 32px;                  
+    min-height: 100vh;          
+  }
+
+  /* ========== 2. 内容区域视觉重排序 ========== */
+  .hero {
+    order: 1;
+    width: 100%;
+    margin-top: 0; 
+    margin-bottom: 24px;
+  }
+
+  .sidebar {
+    order: 2;                   
+    position: static;           
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  .sidebar-card {
+    width: 100%;
+    min-width: 100%;
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  #articles {
+    order: 3;                   
+    width: 100%;
+  }
+
+  .footer {
+    order: 999;
+    width: 100%;
+    margin-top: 48px;
+    padding: 40px 20px 60px;
+    flex-shrink: 0;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+  }
+
+  /* ========== 3. 导航菜单 - 抽屉式 ========== */
+  .nav-links {
+    position: fixed;
+    top: 72px; /* 与 desktop navbar 高度对齐 */
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: var(--bg-overlay);
+    padding: 28px 20px; /* 调整内边距 */
+    gap: 18px; /* 调整间距 */
+    border-bottom: 1px solid var(--border-light);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+    z-index: 999;
+  }
+
+  .nav-links.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-actions .btn-primary {
+    display: none;
+  }
+
+  /* ========== 4. 轮播图适配 ========== */
+  .carousel {
+    aspect-ratio: 16/9;         
+    border-radius: 16px;
+  }
+
+  .carousel-slide {
+    padding: 24px 20px 80px;    /* 增加底部内边距，防止文字被按钮遮挡 */
+  }
+
+  .carousel-title {
+    font-size: 1.5rem;
+    line-height: 1.3;
+    margin-bottom: 16px;        
+  }
+
+  .carousel-desc {
+    font-size: 0.95rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 20px;        
+  }
+
+  .carousel-nav {
+    width: 40px;
+    height: 40px;
+  }
+
+  .carousel-prev { 
+    left: 12px; 
+    bottom: auto;               
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .carousel-next { 
+    right: 12px; 
+    bottom: auto;               
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .carousel-dots {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  /* ========== 5. 文章网格 ========== */
+  .article-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 0;
+  }
+
+  /* ========== 6. 搜索框增强 ========== */
+  .sidebar .search-box {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 14px;
+  }
+
+  .sidebar .search-box input {
+    font-size: 16px;            
+  }
+
+  /* ========== 7. 标签栏优化 (与平板/PC保持一致) ========== */
+  .tags-scroll {
+    padding: 4px 4px 8px;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /*    核心修复：标签样式与PC端对齐 */
+  .tag-pill {
+    padding: 8px 16px; /* 内边距决定宽度，实现自适应 */
+    font-size: 14px;
+    /*  移除可能导致圆形的固定高度或百分比圆角 */
+    height: auto; /* 不设置固定高度 */
+    /*  使用固定的较小圆角，形成椭圆胶囊状，而非圆形 */
+    border-radius: 22px; /* 关键：固定像素值，与内容高度相匹配 */
+    display: inline-flex; /* 保持弹性布局 */
+    align-items: center;
+    justify-content: center;
+    /*  确保文本不换行，使容器宽度由内容和内边距决定 */
+    white-space: nowrap;
+    /*  防止标签被压缩 */
+    flex-shrink: 0;
+    /*  可选：添加过渡效果 */
+    transition: all var(--transition-fast);
+  }
+
+  /*  可选：悬停效果，与PC端一致 */
+  .tag-pill:hover {
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+    border-color: var(--accent-primary);
+  }
+}
+
+
+/* ===============================
+ 小屏手机深度适配 (max-width: 480px)
+保持内容完整显示，标签样式继承自 992px 断点
+=============================== */
+@media (max-width: 480px) {
+    /* 1. 调整主容器边距，确保轮播图不被遮挡 */
+    .container {
+        padding: 108px 12px 16px;
+        gap: 24px;
+        padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    }
+    
+    .navbar {
+        height: 64px;
+        padding: 0 12px;
+    }
+    
+    .nav-links {
+        top: 64px;
+        padding: 20px 16px;
+    }
+    
+    /* 2. 英雄区进一步适配 */
+    .hero {
+        margin-top: 80px;
+    }
+    
+    .carousel {
+        aspect-ratio: 3/2;
+        border-radius: 14px;
+    }
+    
+    .carousel-slide {
+        padding: 20px 16px 70px;
+    }
+    
+    .carousel-title {
+        font-size: 1.3rem;
+    }
+    
+    .carousel-desc {
+        font-size: 0.88rem;
+        -webkit-line-clamp: 2;
+    }
+    
+    .carousel-dots {
+        bottom: 12px;
+        right: 12px;
+    }
+    
+    .carousel-nav {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .carousel-prev {
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .carousel-next {
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    /* 3. 排版优化 */
+    .section-title {
+        font-size: 1.25rem;
+    }
+    
+    .article-card {
+        border-radius: 12px;
+    }
+    
+    .card-content {
+        padding: 16px;
+    }
+    
+    .card-title {
+        font-size: 1.1rem;
+    }
+    
+    .card-excerpt {
+        font-size: 0.9rem;
+        -webkit-line-clamp: 3;
+    }
+    
+    /*  4. 文章卡片元信息 -  核心修复：确保期数信息显示 */
+    .card-meta {
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    /*  修复：移除期数隐藏规则，确保期数在移动端正常显示 */
+    .card-issue {
+        display: inline !important;  /*  强制显示期数 */
+        font-size: 0.75rem;
+        color: var(--text-tertiary);
+        white-space: nowrap;
+    }
+    
+    .card-category-tag {
+        display: inline-flex;
+        padding: 3px 10px;
+        font-size: 0.72rem;
+        border-radius: 12px;
+        white-space: nowrap;
+        height: auto;
+    }
+    
+    .card-meta-divider {
+        display: inline;
+        font-size: 0.75rem;
+    }
+    
+    /* 5. 触控目标增强 */
+    .btn-icon,
+    .tag-pill,
+    .carousel-nav {
+        min-width: 36px;
+        min-height: 36px;
+    }
+    
+    /* 6. 标签栏 - 继承自 992px 断点，无需额外修改 */
+    /* 7. 阅读界面适配 */
+    .reading-scroll {
+        padding-top: 80px;
+        padding-bottom: calc(50px + env(safe-area-inset-bottom));
+    }
+    
+    .reading-header {
+        height: 56px;
+        padding: 0 12px;
+    }
+    
+    .reading-title {
+        font-size: 1.5rem;
+    }
+    
+    .reading-content {
+        font-size: 16px;
+        padding: 0 4px;
+    }
+    
+    /*  8. 阅读界面元信息 - 确保期数和标签显示 */
+    .reading-issue {
+        display: inline !important;  /*  强制显示期数 */
+        font-size: 0.8rem;
+        color: var(--text-tertiary);
+        white-space: nowrap;
+    }
+    
+    .reading-category-tag {
+        display: inline-flex;
+        padding: 4px 12px;
+        font-size: 0.78rem;
+        border-radius: 14px;
+        white-space: nowrap;
+        height: auto;
+    }
+    
+    .reading-meta-divider {
+        display: inline;
+        font-size: 0.75rem;
+    }
+    
+    /* 9. 隐藏次要元素 */
+    .carousel-tag {
+        display: none;
+    }
+    
+    .sidebar-card.subscribe-card {
+        padding: 14px;
+    }
+    
+    .subscribe-card h4 {
+        font-size: 1rem;
+    }
+    
+    .subscribe-card p {
+        font-size: 0.8rem;
+        margin-bottom: 12px;
+    }
+    
+    /* 10. 页脚小屏优化 */
+    .footer {
+        margin-top: 32px;
+        padding: 24px 12px 40px;
+    }
+    
+    .footer a {
+        font-size: 0.82rem;
+    }
+    
+    .footer p {
+        font-size: 0.78rem;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===============================
+ 搜索框增强样式
+=============================== */
+.sidebar .search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 26px;
+    transition: all var(--transition-normal);
+    cursor: text; /* 改为 text 光标 */
+}
+
+.sidebar .search-box:focus-within,
+.sidebar .search-box.expanded {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+    background: var(--bg-primary);
+}
+
+.sidebar .search-box svg {
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.sidebar .search-box.expanded svg,
+.sidebar .search-box:focus-within svg {
+    color: var(--accent-primary);
+}
+
+.sidebar .search-box input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    outline: none;
+    font-family: inherit;
+    width: 100%;
+    cursor: text;
+}
+
+.sidebar .search-box input::placeholder {
+    color: var(--text-tertiary);
+}
+
+/* 顶部搜索按钮激活状态 */
+#searchToggle.active {
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+}
+
+#searchToggle.active svg {
+    stroke: var(--bg-primary);
+}
+
+
+
+
+
+/* ===============================
+ Logo 图片夜间模式适配
+=============================== */
+.logo img {
+  /* 确保图片在不同模式下都保持清晰 */
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: none; /* 防止图片干扰点击事件 */
+  transition: filter var(--transition-normal); /* 添加过渡效果 */
+}
+
+/*  深色模式下的 logo 白化处理 */
+[data-theme="dark"] .logo img {
+  filter: brightness(0) invert(1) contrast(1.2); 
+  /* 
+    brightness(0): 将图片亮度降到最低 (接近黑色)。
+    invert(1): 将图片颜色完全反转 (黑变白，白变黑，彩色变其补色)。
+    contrast(1.2): 微调对比度，使白色线条或文字更清晰醒目 (可选，根据实际效果调整)。
+  */
+}
+
+/*

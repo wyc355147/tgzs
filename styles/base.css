@@ -1,0 +1,276 @@
+/* ===============================
+    核心设计系统 - 现代化极简 + 毛玻璃
+   =============================== */
+:root {
+  /* 色彩系统 - 中性灰度 */
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --text-tertiary: #71717a;
+  --text-inverse: #ffffff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9f9f9;
+  --bg-tertiary: #f0f0f1;
+  --bg-overlay: rgba(255, 255, 255, 0.92);
+  --border-color: #e4e4e7;
+  --border-light: rgba(0, 0, 0, 0.08);
+  --accent-primary: #18181b;
+  --accent-hover: #3f3f46;
+  --accent-glow: rgba(24, 24, 27, 0.15);
+  
+  /* 毛玻璃效果参数 - iOS风格 */
+  --glass-blur: 20px;
+  --glass-saturation: 180%;
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  
+  /* 布局与间距 */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --container-max: 1440px;
+  --content-max: 720px;
+  --sidebar-width: 360px;
+  
+  /* 阴影系统 */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 0 1px var(--accent-glow);
+  
+  /* 动效系统 */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-fast: 150ms var(--ease-smooth);
+  --transition-normal: 300ms var(--ease-smooth);
+  --transition-slow: 500ms var(--ease-smooth);
+  
+  /* 字体系统 */  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+               "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", sans-serif;
+  --font-serif: "Georgia", "Times New Roman", "STSong", "Songti SC", serif;
+  --font-mono: "SF Mono", "Monaco", "Consolas", "Courier New", monospace;
+  
+  /* 阅读排版 */
+  --reading-font-size: 1.0625rem;
+  --reading-line-height: 1.85;
+  --reading-paragraph-margin: 1.4em;
+  --reading-heading-margin: 2.2em 0 1em;
+}
+
+/*  深色模式变量 */
+[data-theme="dark"] {
+  --text-primary: #f4f4f5;
+  --text-secondary: #d4d4d8;
+  --text-tertiary: #a1a1aa;
+  --bg-primary: #09090b;
+  --bg-secondary: #18181b;
+  --bg-tertiary: #27272a;
+  --bg-overlay: rgba(18, 18, 20, 0.94);
+  --border-color: #3f3f46;
+  --border-light: rgba(255, 255, 255, 0.08);
+  --accent-primary: #f4f4f5;
+  --accent-hover: #e4e4e7;
+  --accent-glow: rgba(244, 244, 245, 0.12);
+  --glass-bg: rgba(24, 24, 27, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* ===============================
+    基础重置与全局样式
+   =============================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background var(--transition-normal), color var(--transition-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+body.reading-active {
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--accent-primary);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-md);
+}
+
+/* 隐藏滚动条但保留功能 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ===============================
+    毛玻璃效果核心类
+   =============================== */
+.glass {
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) !important;
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;  box-shadow: var(--glass-shadow) !important;
+}
+
+.glass-solid {
+  backdrop-filter: blur(calc(var(--glass-blur) * 1.2)) saturate(var(--glass-saturation)) !important;
+  -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 1.2)) saturate(var(--glass-saturation)) !important;
+  background: var(--bg-overlay) !important;
+  border: 1px solid var(--border-light) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* ===============================
+    动画与交互增强
+   =============================== */
+@keyframes fadeInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* 图片懒加载占位 */
+.image-placeholder {
+  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* 焦点可见性 - 无障碍 */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;    scroll-behavior: auto !important;
+  }
+}
+
+
+
+
+/* 在 base.css 中添加 */
+
+/* 修复：生产环境滚动行为冲突 */
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* 阅读界面内部滚动容器 - 独立滚动行为 */
+.reading-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 修复：防止滚动冲突 */
+.reading-view.active {
+    overflow: hidden;
+}
+
+/* 生产环境兼容：确保滚动容器正确识别 */
+#readingScroll {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===============================
+ 安全保护样式 - 禁止选择与缩放
+=============================== */
+body {
+    /* 禁止文本选择 */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    /* 禁止触摸缩放 */
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+}
+
+/* 允许输入框内正常选择和编辑 */
+input, textarea, [contenteditable="true"] {
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    touch-action: auto;
+}
+
+/* 禁止图片拖拽 */
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    pointer-events: auto; /* 保持点击事件 */
+}

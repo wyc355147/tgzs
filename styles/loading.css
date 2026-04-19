@@ -1,0 +1,300 @@
+/**
+* 文件名：loading.css
+* 作用：铜鼓之声加载动画样式（成功案例标准版 - 轴心精准对齐 + 无限循环）
+* 版本：14.0.0
+* 设计标准：严格遵循成功案例的纯 rotateY 驱动、多页交错、静态遮蔽重置逻辑
+*/
+
+/* ===============================
+ 核心变量映射 (适配项目主题)
+ =============================== */
+:root {
+  --book-bg: var(--bg-primary);
+  --book-border: var(--border-color);
+  --book-spine-width: 4px;
+  --book-page-thickness: 1px;
+  --book-shadow: rgba(0, 0, 0, 0.06);
+  --book-shadow-hover: rgba(0, 0, 0, 0.12);
+  --ease-page-flip: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  --book-bg: var(--bg-secondary);
+  --book-border: var(--border-color);
+  --book-shadow: rgba(0, 0, 0, 0.35);
+  --book-shadow-hover: rgba(0, 0, 0, 0.55);
+}
+
+/* ===============================
+ 加载遮罩容器 (保留淡出逻辑与滚动锁定)
+ =============================== */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--book-bg);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s var(--ease-page-flip), visibility 0.6s var(--ease-page-flip);
+  overflow: hidden;
+  touch-action: none;
+}
+
+.loading-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* 滚动锁定 */
+body.loading-active {
+  overflow: hidden !important;
+  touch-action: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===============================
+ 3D 容器与呼吸微动
+ =============================== */
+.book-loader {
+  position: relative;
+  width: 64px;
+  height: 84px;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  animation: bookBreathe 3.5s var(--ease-page-flip) infinite;
+  transform: translateZ(0);
+}
+
+/* ===============================
+ 书脊（含多层光泽扫描）
+ =============================== */
+.book-spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--book-spine-width);
+  height: 100%;
+  background: linear-gradient(90deg,
+    rgba(0, 0, 0, 0.08) 0%,
+    rgba(0, 0, 0, 0.25) 35%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0.25) 65%,
+    rgba(0, 0, 0, 0.08) 100%
+  );
+  border-radius: 2px 0 0 2px;
+  transform: translateZ(0);
+  z-index: 1;
+  overflow: hidden;
+  box-shadow: 1px 0 4px var(--book-shadow), inset 1px 0 2px rgba(0,0,0,0.02);
+}
+
+[data-theme="dark"] .book-spine {
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.25) 35%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0.25) 65%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+}
+
+.book-spine::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%);
+  animation: spineGlowScan 2.4s var(--ease-page-flip) infinite;
+}
+
+.book-spine::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -50%;
+  width: 30%; height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%);
+  animation: spineGlowScanSec 2.4s var(--ease-page-flip) infinite;
+  animation-delay: 0.3s;
+}
+
+/* ===============================
+ 页面基础样式（轴心精准对齐）
+ =============================== */
+.book-page {
+  position: absolute;
+  left: var(--book-spine-width);
+  top: 0;
+  width: calc(100% - var(--book-spine-width));
+  height: 100%;
+  background: var(--book-bg);
+  border: var(--book-page-thickness) solid var(--book-border);
+  border-radius: 0 8px 8px 0;
+  /* 核心修复：严格锁定左侧中心为旋转轴 */
+  transform-origin: 0% 50%;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  will-change: transform, box-shadow;
+  transform: translateZ(0);
+}
+
+/* 页面背面材质 */
+.book-page::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg,
+    rgba(0, 0, 0, 0.06) 0%,
+    rgba(0, 0, 0, 0.02) 25%,
+    transparent 45%
+  );
+  border: var(--book-page-thickness) solid var(--book-border);
+  border-radius: 8px 0 0 8px;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  box-shadow: inset -3px 0 6px rgba(0,0,0,0.04);
+}
+
+[data-theme="dark"] .book-page::after {
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.03) 25%,
+    transparent 45%
+  );
+}
+
+/* 静态底页（增强层次与遮蔽重置瞬间） */
+.book-page.static-left {
+  z-index: 1;
+  transform: rotateY(-180deg) translateZ(-1px);
+  opacity: 0.92;
+  box-shadow: inset -3px 0 10px rgba(0,0,0,0.06), -2px 2px 10px var(--book-shadow);
+}
+
+.book-page.static-right {
+  z-index: 2;
+  transform: rotateY(0deg) translateZ(-1px);
+  opacity: 0.92;
+  box-shadow: inset 3px 0 10px rgba(0,0,0,0.06), 2px 2px 10px var(--book-shadow);
+}
+
+/* ===============================
+ 循环动画核心（纯 rotateY 驱动）
+ =============================== */
+.book-page.active {
+  z-index: 3;
+  animation: pageFlipInfinite 2.4s var(--ease-page-flip) infinite;
+}
+
+/* 交错延迟：实现无缝连续翻动 */
+.book-page.active:nth-of-type(3) { animation-delay: 0s; }
+.book-page.active:nth-of-type(4) { animation-delay: 0.6s; }
+.book-page.active:nth-of-type(5) { animation-delay: 1.2s; }
+.book-page.active:nth-of-type(6) { animation-delay: 1.8s; }
+
+@keyframes pageFlipInfinite {
+  0% {
+    transform: rotateY(0deg);
+    box-shadow: inset 3px 0 8px rgba(0,0,0,0.04), 2px 2px 12px var(--book-shadow);
+  }
+  15% {
+    transform: rotateY(-20deg);
+    box-shadow: inset 3px 0 8px rgba(0,0,0,0.08), 8px 12px 24px var(--book-shadow-hover);
+  }
+  50% {
+    transform: rotateY(-135deg);
+    box-shadow: inset -3px 0 8px rgba(0,0,0,0.08), -8px 12px 24px var(--book-shadow-hover);
+  }
+  85% {
+    transform: rotateY(-160deg);
+    box-shadow: inset -3px 0 8px rgba(0,0,0,0.05), -4px 8px 16px var(--book-shadow);
+  }
+  100% {
+    transform: rotateY(-180deg);
+    box-shadow: inset -3px 0 8px rgba(0,0,0,0.04), -2px 2px 12px var(--book-shadow);
+  }
+}
+
+@keyframes bookBreathe {
+  0%, 100% { transform: translateZ(0) scale(1); }
+  50% { transform: translateZ(0) scale(1.015); }
+}
+
+@keyframes spineGlowScan {
+  0% { left: -100%; opacity: 0; }
+  15% { opacity: 1; }
+  50% { left: 200%; opacity: 1; }
+  85% { opacity: 0; }
+  100% { left: 200%; opacity: 0; }
+}
+
+@keyframes spineGlowScanSec {
+  0% { left: -50%; opacity: 0; }
+  20% { opacity: 0.5; }
+  55% { left: 150%; opacity: 0.5; }
+  90% { opacity: 0; }
+  100% { left: 150%; opacity: 0; }
+}
+
+/* ===============================
+ 调试模式指示器
+ =============================== */
+.loading-debug-indicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 100000;
+}
+
+.loading-debug-indicator button {
+  padding: 6px 14px;
+  background: var(--bg-primary);
+  color: var(--accent-primary);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-page-flip);
+}
+
+.loading-debug-indicator button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ===============================
+ 移动端适配
+ =============================== */
+@media (max-width: 480px) {
+  .book-loader { width: 52px; height: 68px; }
+  .book-page { border-width: 0.8px; }
+  .book-spine { width: 3px; }
+  .loading-debug-indicator { bottom: 16px; right: 16px; padding: 10px 16px; font-size: 0.8rem; }
+}
+
+/* ===============================
+ 无障碍与性能降级
+ =============================== */
+@media (prefers-reduced-motion: reduce) {
+  .book-loader, .book-page, .book-spine::after, .book-spine::before {
+    animation: none !important;
+    transform: none !important;
+  }
+  .book-page.static-left { transform: rotateY(-180deg) translateZ(-1px); }
+  .book-page.static-right { transform: rotateY(0deg) translateZ(-1px); }
+}
