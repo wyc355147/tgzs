@@ -1252,8 +1252,8 @@ class AboutSystem {
                     </section>
                     <footer class="about-footer">
 <div style="display:flex;justify-content:center;gap:28px;margin-bottom:20px;flex-wrap:wrap">
-    <a href="https://wyc355147.github.io/tgzs-Submission-guidelines/" target="_blank" rel="noopener noreferrer" style="font-weight:500; cursor: pointer;">投稿指南</a>
-    <a href="https://wyc355147.github.io/tgzs-Use-declaration/" target="_blank" rel="noopener noreferrer" style="font-weight:500; cursor: pointer;">使用声明</a>
+    <a href="https://tgzs-submission-guidelines.rth1.xyz" target="_blank" rel="noopener noreferrer" style="font-weight:500; cursor: pointer;">投稿指南</a>
+    <a href="https://tgzs-use-declaration.rth1.xyz" target="_blank" rel="noopener noreferrer" style="font-weight:500; cursor: pointer;">使用声明</a>
 </div>
                         <p class="about-footer-text">© 2026 铜鼓之声 · 白云工作室 BaiyunStudio · 天柱县第五中学</p>
                     </footer>
