@@ -35,7 +35,7 @@ const MANUAL_SLIDES = [
         cover: 'https://s41.ax1x.com/2026/03/08/pePjeuF.jpg',
         actionType: 'link',
         // 核心修复：确保这里是正确的 GitHub Releases 最新版的链接
-        actionValue: 'https://github.com/wyc355147/tongguzhisheng/releases/latest',
+        actionValue: 'https://tgzs-app-about.rth1.xyz',
         ctaText: '立即下载',
         priority: 2,
         style: ''
