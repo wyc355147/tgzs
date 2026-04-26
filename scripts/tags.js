@@ -14,7 +14,7 @@ const tagsConfig = [
     { id: "党建引领", name: "党建引领", active: false },
     { id: "德育教育", name: "德育教育", active: false },
     { id: "教海拾贝", name: "教海拾贝", active: false },
-    { id: "心情驿站", name: "心情驿站", active: false },
+    { id: "心晴驿站", name: "心晴驿站", active: false },
     { id: "校园榜样", name: "校园榜样", active: false },
     { id: "校园通讯", name: "校园通讯", active: false },
     { id: "民族地区基础教育质量提升行动专项计划项目", name: "高质量发展", active: false },
