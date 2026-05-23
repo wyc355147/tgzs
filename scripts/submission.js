@@ -12,7 +12,7 @@ console.log('投稿系统模块加载 (v1.1.0)...');
 // ===============================
 const SUBMISSION_CONFIG = {
     // 投稿指南链接
-    guidelinesUrl: 'https://wyc355147.github.io/tgzs-Submission-guidelines/',
+    guidelinesUrl: 'https://tgzs-submission-guidelines.rth1.xyz/',
     // 投稿邮箱
     email: 'wyc_355147@163.com',
     // 邮箱主题预设
